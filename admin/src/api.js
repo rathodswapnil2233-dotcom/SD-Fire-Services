@@ -1,0 +1,12 @@
+import axios from 'axios';
+export const API_BASE=import.meta.env.VITE_API_URL||'http://localhost:5000/api';
+export const api=axios.create({baseURL:API_BASE});
+api.interceptors.request.use(c=>{const t=localStorage.getItem('sd_admin_token');if(t)c.headers.Authorization=`Bearer ${t}`;return c});
+export const login=(data)=>api.post('/auth/login',data).then(r=>r.data);
+export const getServices=()=>api.get('/services').then(r=>r.data);
+export const createService=(d)=>api.post('/services',d).then(r=>r.data);
+export const deleteService=(id)=>api.delete(`/services/${id}`);
+export const getLeads=()=>api.get('/leads').then(r=>r.data);
+export const updateLead=(id,status)=>api.patch(`/leads/${id}`,{status}).then(r=>r.data);
+export const getSettings=()=>api.get('/settings/company').then(r=>r.data);
+export const saveSettings=(d)=>api.put('/settings/company',d).then(r=>r.data);
