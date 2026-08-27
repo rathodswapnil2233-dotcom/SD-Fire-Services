@@ -8,6 +8,7 @@ export async function login(req, res) {
   if (!user) return res.status(401).json({ message: 'Invalid email or password' });
   const ok = await bcrypt.compare(password || '', user.passwordHash);
   if (!ok) return res.status(401).json({ message: 'Invalid email or password' });
-  const token = jwt.sign({ id: user._id, role: user.role, email: user.email }, process.env.JWT_SECRET, { expiresIn: '8h' });
+  const secret = process.env.JWT_SECRET || 'sd_services_secret_jwt_key_2026';
+  const token = jwt.sign({ id: user._id, role: user.role, email: user.email }, secret, { expiresIn: '8h' });
   res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
 }
